@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block body %}
+    <h1>Mes Notifications</h1>
+
+    {% for notif in notifications %}
+        <div style="border:1px solid #ccc; padding:10px; margin:5px; {% if not notif.lu %}background-color:#f0f8ff{% endif %}">
+            <p>{{ notif.text }}</p>
+            <small>{{ notif.datetime|date('d/m/Y H:i') }}</small>
+        </div>
+    {% else %}
+        <p>Aucune notification pour le moment.</p>
+    {% endfor %}
+
+    <a href="{{ path('notification_create') }}">Créer une notification test</a>
+{% endblock %}
