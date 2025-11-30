@@ -11,6 +11,7 @@
 
 ###> phpunit/phpunit ###
 /phpunit.xml
+<<<<<<< HEAD
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
@@ -19,6 +20,11 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+=======
+/.phpunit.cache/
+###< phpunit/phpunit ###
+
+>>>>>>> origin/dev
 ###> symfony/asset-mapper ###
 /public/assets/
 /assets/vendor/

@@ -36,6 +36,7 @@
         ]
     },
     "phpunit/phpunit": {
+<<<<<<< HEAD
         "version": "9.6",
         "recipe": {
             "repo": "github.com/symfony/recipes",
@@ -47,6 +48,20 @@
             "./.env.test",
             "./phpunit.xml.dist",
             "./tests/bootstrap.php"
+=======
+        "version": "11.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "11.1",
+            "ref": "1117deb12541f35793eec9fff7494d7aa12283fc"
+        },
+        "files": [
+            "./.env.test",
+            "./phpunit.dist.xml",
+            "./tests/bootstrap.php",
+            "./bin/phpunit"
+>>>>>>> origin/dev
         ]
     },
     "symfony/asset-mapper": {
@@ -177,6 +192,7 @@
             "./config/packages/notifier.yaml"
         ]
     },
+<<<<<<< HEAD
     "symfony/phpunit-bridge": {
         "version": "8.0",
         "recipe": {
@@ -192,6 +208,8 @@
             "./tests/bootstrap.php"
         ]
     },
+=======
+>>>>>>> origin/dev
     "symfony/routing": {
         "version": "6.4",
         "recipe": {
