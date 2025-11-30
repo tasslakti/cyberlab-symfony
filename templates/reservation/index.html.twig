@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservations - CyberLab{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1>Mes Réservations</h1>
+
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+
+                {% if reservations|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Lab</th>
+                                <th>Date Début</th>
+                                <th>Date Fin</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for reservation in reservations %}
+                                <tr>
+                                    <td>{{ reservation.lab.title }}</td>
+                                    <td>{{ reservation.startTime|date('d/m/Y H:i') }}</td>
+                                    <td>{{ reservation.endTime|date('d/m/Y H:i') }}</td>
+                                    <td>
+                                    <span class="badge bg-{{ reservation.status == 'confirmed' ? 'success' : (reservation.status == 'pending' ? 'warning' : 'danger') }}">
+                                        {{ reservation.status }}
+                                    </span>
+                                    </td>
+                                    <td>
+                                        {% if reservation.status == 'pending' %}
+                                            <a href="{{ path('app_reservation_cancel', {id: reservation.id}) }}" class="btn btn-danger btn-sm">Annuler</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>Aucune réservation.</p>
+                    <a href="{{ path('labs_index') }}" class="btn btn-primary">Réserver un lab</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservations en Attente - CyberLab{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="h3">
+                        <i class="fas fa-clock me-2"></i>Réservations en Attente de Confirmation
+                    </h1>
+                    <a href="{{ path('app_reservations') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour aux Réservations
+                    </a>
+                </div>
+
+                {% if reservations|length > 0 %}
+                    <div class="row">
+                        {% for reservation in reservations %}
+                            <div class="col-lg-6 col-md-12 mb-4">
+                                <div class="lab-card">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="card-title mb-1">{{ reservation.lab.title }}</h5>
+                                                <span class="badge bg-warning">EN ATTENTE</span>
+                                            </div>
+                                            <div class="text-end">
+                                                <small class="text-secondary">#{{ reservation.id }}</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="reservation-info mb-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fas fa-user text-primary me-2"></i>
+                                                <small>{{ reservation.user.firstName }} {{ reservation.user.lastName }}</small>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fas fa-envelope text-primary me-2"></i>
+                                                <small>{{ reservation.user.email }}</small>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fas fa-clock text-primary me-2"></i>
+                                                <small>
+                                                    {{ reservation.startTime|date('d/m/Y H:i') }} -
+                                                    {{ reservation.endTime|date('H:i') }}
+                                                </small>
+                                            </div>
+                                            {% if reservation.notes %}
+                                                <div class="d-flex align-items-start mb-2">
+                                                    <i class="fas fa-sticky-note text-primary me-2 mt-1"></i>
+                                                    <small>{{ reservation.notes }}</small>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ path('app_reservation_confirm', {id: reservation.id}) }}"
+                                               class="btn btn-success btn-sm"
+                                               onclick="return confirm('Confirmer cette réservation ?')">
+                                                <i class="fas fa-check me-1"></i>Confirmer
+                                            </a>
+                                            <a href="{{ path('app_reservation_show', {id: reservation.id}) }}"
+                                               class="btn btn-outline-info btn-sm">
+                                                <i class="fas fa-eye me-1"></i>Détails
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                            <h3 class="h4">Aucune réservation en attente</h3>
+                            <p class="text-secondary mb-4">Toutes les réservations ont été traitées.</p>
+                            <a href="{{ path('app_reservations') }}" class="btn btn-primary">
+                                <i class="fas fa-arrow-left me-2"></i>Retour aux Réservations
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
