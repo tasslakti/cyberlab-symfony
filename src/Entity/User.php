@@ -3,15 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé.')]
+class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,7 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $nomComplet = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -31,44 +30,84 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $role = 'ROLE_USER';
+    private ?string $role = null;
 
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
-    private Collection $reservations;
-
-    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'user')]
-    private Collection $reviews;
-
-    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
-    private Collection $notifications;
-
-    public function __construct()
+    public function getId(): ?int
     {
-        $this->reservations = new ArrayCollection();
-        $this->reviews = new ArrayCollection();
-        $this->notifications = new ArrayCollection();
+        return $this->id;
     }
 
-    // Getters et Setters existants
-    public function getId(): ?int { return $this->id; }
-    public function getNomComplet(): ?string { return $this->nomComplet; }
-    public function setNomComplet(string $nomComplet): static { $this->nomComplet = $nomComplet; return $this; }
-    public function getEmail(): ?string { return $this->email; }
-    public function setEmail(string $email): static { $this->email = $email; return $this; }
-    public function getTelephone(): ?string { return $this->telephone; }
-    public function setTelephone(?string $telephone): static { $this->telephone = $telephone; return $this; }
+    public function getNomComplet(): ?string
+    {
+        return $this->nomComplet;
+    }
 
-    // Méthodes pour l'authentification
-    public function getMotDePasse(): ?string { return $this->motDePasse; }
-    public function setMotDePasse(string $motDePasse): static { $this->motDePasse = $motDePasse; return $this; }
+    public function setNomComplet(string $nomComplet): static
+    {
+        $this->nomComplet = $nomComplet;
+        return $this;
+    }
 
-    public function getRole(): ?string { return $this->role; }
-    public function setRole(string $role): static { $this->role = $role; return $this; }
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
 
-    // Implémentation des interfaces de sécurité
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function getMotDePasse(): ?string
+    {
+        return $this->motDePasse;
+    }
+
+    public function setMotDePasse(string $motDePasse): static
+    {
+        $this->motDePasse = $motDePasse;
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): static
+    {
+        $this->telephone = $telephone;
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): static
+    {
+        $this->role = $role;
+        return $this;
+    }
+
+    // === Méthodes obligatoires de UserInterface ===
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email; // l'identifiant unique
+    }
+
     public function getRoles(): array
     {
-        return [$this->role];
+        return [$this->role ?? 'ROLE_USER'];
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->role = $roles[0] ?? 'ROLE_USER';
+        return $this;
     }
 
     public function getPassword(): string
@@ -76,18 +115,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->motDePasse;
     }
 
-    public function getUserIdentifier(): string
-    {
-        return $this->email;
-    }
-
     public function eraseCredentials(): void
     {
-        // Si tu stockes des données temporaires sensibles, efface-les ici
+        // ici on peut nettoyer les données sensibles si besoin
     }
 
-    // Relations
-    public function getReservations(): Collection { return $this->reservations; }
-    public function getReviews(): Collection { return $this->reviews; }
-    public function getNotifications(): Collection { return $this->notifications; }
+    public function getSalt(): ?string
+    {
+        return null; // inutile avec bcrypt
+    }
 }

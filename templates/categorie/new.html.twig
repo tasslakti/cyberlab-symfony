@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une catégorie{% endblock %}
+
+{% block body %}
+    <h2>Créer une catégorie</h2>
+
+    <div class="card p-4">
+        {{ form_start(form) }}
+        {{ form_widget(form, {'attr': {'class': 'form-control mb-3'}}) }}
+        <button type="submit" class="btn btn-success">Créer</button>
+        {{ form_end(form) }}
+    </div>
+
+    <a href="{{ path('categorie_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+{% endblock %}
