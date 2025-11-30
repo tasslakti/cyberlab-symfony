@@ -1,0 +1,9 @@
+{# Ajoutez ce bouton dans la page de détail d'un lab #}
+<div class="d-flex gap-2 mt-4">
+    <a href="{{ path('app_reservation_create', {id: lab.id}) }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-calendar-plus me-2"></i>Réserver ce Lab
+    </a>
+    <a href="{{ path('labs_index') }}" class="btn btn-outline-secondary btn-lg">
+        <i class="fas fa-arrow-left me-2"></i>Retour
+    </a>
+</div>
